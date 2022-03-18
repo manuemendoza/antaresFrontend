@@ -1,12 +1,12 @@
+import './NavBar.scss';
 import { Component } from "react";
-import { ApiUser } from "../../services/Api/ApiUser";
-import { Link } from "react-router-dom";
-
+import { Link, Navigate } from "react-router-dom";
 class NavBar extends Component{
     
     state = {
         token: localStorage.getItem('token'),
         user: JSON.parse(localStorage.getItem('user')),
+        logout: false
     };
 
     constructor(props){
@@ -14,10 +14,19 @@ class NavBar extends Component{
         this.props= props;
     }
 
-    render(){
+    handleLogout = () =>{
+        localStorage.setItem('token', []);
+        localStorage.setItem('user', []);
+        this.setState({logout:true});
         
+    };
+
+    render(){
+        if (this.state.logout) {
+            return <Navigate to= '/login'/>;
+        }
         return(
-            <div className="container__login">
+            <div className="navbar_container">
                 <nav className="navbar">
                     <ul className="navbar_link">
                         <li> 
@@ -31,9 +40,9 @@ class NavBar extends Component{
                         }
                     </ul>
                 </nav>
-                <div>
+                <div className="navbar_button">
                     <p>{this.state.user.name} {this.state.user.surname}</p>
-                    <button>Logout</button>
+                    <button onClick={() => this.handleLogout() }>Logout</button>
                 </div>
             </div>
         );

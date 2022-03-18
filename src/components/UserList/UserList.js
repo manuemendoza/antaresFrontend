@@ -1,12 +1,11 @@
 import { Component } from "react";
-import UserCard from "../UserRow/UserRow";
-
+import UserRow from "../UserRow/UserRow";
 class UserList extends Component {
-    render(props){
-        const { user } = this.props
+    render(){
+        const { users } = this.props
         return(
             <>
-                {user.map(user => <UserCard
+                {users.map(user => <UserRow
                 key={user._id}
                 user={user}
                 />)}

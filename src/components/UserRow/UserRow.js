@@ -8,7 +8,6 @@ class UserRow extends Component {
             <tr key={user.id}>
                 <td>{user.name}</td>
                 <td>{user.surname}</td>
-                <button>ver</button>
             </tr>
             </>
         )

@@ -1,46 +1,55 @@
 import { Component } from "react";
-import { ApiLog } from "../../services/Api/ApiLog";
+import { ApiUser } from "../../services/Api/ApiUser";
+import UserList from "../UserList/UserList";
+import { Link } from "react-router-dom";
 
 class UserTable extends Component{
     
-    state = {
-        token: localStorage.getItem('token'),
-        user: JSON.parse(localStorage.getItem('user')),
-    };
-
     constructor(props){
         super(props);
-        this.props= props;
+        this.state = {
+            token: localStorage.getItem('token'),
+            user: JSON.parse(localStorage.getItem('user')),
+            users:[]
+        };
+        this.handledGetUsers = this.handledGetUsers.bind(this);
+        // this.handledPostUser = this.handledPostUser.bind(this);
     }
 
-    handledGetlogs = async () => {
-        const userId = this.state.user._id;
+    handledGetUsers = async () => {
         try {
-            const res = await ApiLog.getLogs(userId);
-            console.log('funciona mi triple', res);
+            const res = await ApiUser.getUsers();
+            this.setState({users: res});
         } catch (error) {
-            console.error(error.code);
+            console.error(error.message);
         }
     };
 
     componentDidMount = () => {
-        this.handledGetlogs();
+        this.handledGetUsers();
+        
     }
+
     render(){
         
         return(
             <div>
+                <button><Link to="/register">Añadir Usuario</Link></button>
                 <table>
                     <caption> Usuarios </caption>
                     <thead>
                         <tr>
                             <th>Nombre</th>
                             <th>Apellido</th>
+                            <th>Día</th>
                             <th>Tiempo Trabajado</th>
+                            <th>registros</th>
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        <UserList
+                            users={this.state.users}
+                        />
                     </tbody>
                 </table>
             </div>

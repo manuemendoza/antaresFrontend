@@ -1,37 +1,21 @@
 import { Component } from "react";
 import { ApiUser } from "../../services/Api/ApiUser";
-import { withRouter } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 class Login extends Component{
     
-    state = {
-        token: localStorage.getItem('token'),
-        user: JSON.parse(localStorage.getItem('user'))
-    };
-
     constructor(props){
         super(props);
         this.props= props;
+        this.state = {
+            login: false
+        }
     }
-
-    // handleRedirectionTo = () => {
-    //     const token = this.state.token;
-    //     const userData = this.state.user;
-        
-            
-        
-    //     if (token && userData.role === 'admin') {
-    //         console.log('hola1', typeof this.props.history);
-    //     } else {
-    //         this.props.history.push('/user');
-    //     }
-    // };
     
     handleSendData = async (e) =>{
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
-        console.log('esto funciona', email, password);
         try {
             const res = await ApiUser.loginUser(email, password);
             const token = res.token;
@@ -39,16 +23,16 @@ class Login extends Component{
             console.log('funciona mi triple', token, user);
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
+            this.setState({login: true})
         } catch (error) {
             console.error(error.code);
         }
     };
 
-    // componentDidMount = () => {
-    //     this.handleRedirectionTo();
-    // }
     render(){
-        
+        if (this.state.login) {
+            return <Navigate to= '/'/>;
+        }
         return(
             <div className="container__login">
             <h1 className="login_title">Iniciar sesión</h1>

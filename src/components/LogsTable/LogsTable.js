@@ -5,16 +5,14 @@ import NewEntry from "../NewEntry/NewEntry";
 
 
 class LogsTable extends Component{
-    
-    state = {
-        token: localStorage.getItem('token'),
-        user: JSON.parse(localStorage.getItem('user')),
-        logs:[],
-        // newLog:[]
-    };
 
     constructor(props){
         super(props);
+        this.state = {
+            token: localStorage.getItem('token'),
+            user: JSON.parse(localStorage.getItem('user')),
+            logs:[]
+        };
         this.handledGetLogs = this.handledGetLogs.bind(this);
         this.handledPostLogs = this.handledPostLogs.bind(this);
     }
@@ -23,6 +21,7 @@ class LogsTable extends Component{
         const userId = this.state.user._id;
         try {
             const res = await ApiLog.getLogs(userId);
+            console.log('no funciona', res);
             this.setState({logs: res});
         } catch (error) {
             console.error(error.message);
@@ -31,8 +30,8 @@ class LogsTable extends Component{
 
     handledPostLogs = async (type) => {
         try {
-            const res = await ApiLog.postLog(type);
-            // this.setState({newLog: res});
+            await ApiLog.postLog(type);
+            await this.handledGetLogs();
         } catch (error) {
             console.error(error.message);
         }
@@ -40,6 +39,7 @@ class LogsTable extends Component{
 
     componentDidMount = () => {
         this.handledGetLogs();
+        
     }
     render(){
         

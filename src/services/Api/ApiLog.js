@@ -27,7 +27,7 @@ export const ApiLog = {
         for (let day in responseData) {
             journal.push({
                 day: day,
-                hours: responseData[day].hours,
+                hours: Math.round(100 * responseData[day].hours) / 100,
                 logs: responseData[day].logs
             });
         }
